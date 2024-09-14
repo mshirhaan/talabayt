@@ -14,8 +14,16 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FiAlertCircle, FiClock, FiCheckCircle } from "react-icons/fi";
+import { IconType } from "react-icons";
 
-const StatCard = ({ title, stat, status, icon }) => {
+interface StatCardProps {
+  title: string;
+  stat: number | string;
+  status: string;
+  icon: IconType; // Type for the icon (from react-icons)
+}
+
+const StatCard: React.FC<StatCardProps> = ({ title, stat, status, icon }) => {
   const bgColor = useColorModeValue("white", "gray.700");
   const textColor = useColorModeValue("gray.600", "gray.300");
 
