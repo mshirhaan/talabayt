@@ -1,95 +1,113 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+// src/app/page.tsx
+
+'use client'
+
+import { useAuth } from '@/contexts/AuthContext'
+import { 
+  Box, 
+  Container, 
+  Heading, 
+  SimpleGrid, 
+  Text, 
+  VStack, 
+  Button, 
+  Icon,
+  useColorModeValue
+} from '@chakra-ui/react'
+import { FaTools, FaClipboardList, FaHistory, FaUserCog } from 'react-icons/fa'
+import NextLink from 'next/link'
+import { IconType } from 'react-icons'
+
+interface FeatureProps {
+  title: string
+  text: string
+  icon: IconType
+  href: string
+}
+
+const Feature = ({ title, text, icon, href }: FeatureProps) => {
+  return (
+    <VStack
+      bg={useColorModeValue('white', 'gray.800')}
+      boxShadow={'2xl'}
+      rounded={'md'}
+      overflow={'hidden'}
+      p={6}
+      textAlign={'center'}
+      align={'center'}
+      spacing={4}
+    >
+      <Icon as={icon} w={10} h={10} color="#ff9202" />
+      <Heading fontSize={'2xl'}>{title}</Heading>
+      <Text color={'gray.500'}>{text}</Text>
+      <Button
+        as={NextLink}
+        href={href}
+        mt={2}
+        fontSize={'sm'}
+        rounded={'full'}
+        bg={'#002f6d'}
+        color={'white'}
+        _hover={{
+          bg: '#001f4d',
+        }}
+        _focus={{
+          bg: '#001f4d',
+        }}
+      >
+        Go to {title}
+      </Button>
+    </VStack>
+  )
+}
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { user } = useAuth()
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  return (
+    <Box>
+      <Container maxW={'5xl'} py={12}>
+        <VStack spacing={2} textAlign="center" mb={12}>
+          <Heading
+            as="h1"
+            fontSize={{ base: '3xl', sm: '4xl', md: '5xl' }}
+            fontWeight="bold"
+            color={'#002f6d'}
+            mb={4}
           >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            Welcome to House Maintenance App
+          </Heading>
+          <Text color={'gray.500'} fontSize={'lg'}>
+            Your one-stop solution for all your home maintenance needs
+          </Text>
+        </VStack>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
+          <Feature
+            icon={FaTools}
+            title={'New Request'}
+            text={'Submit a new maintenance request for your home'}
+            href={'/request'}
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          <Feature
+            icon={FaClipboardList}
+            title={'My Requests'}
+            text={'View and manage your existing maintenance requests'}
+            href={'/my-requests'}
           />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+          <Feature
+            icon={FaHistory}
+            title={'Request History'}
+            text={'Access the history of your past maintenance requests'}
+            href={'/history'}
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+          <Feature
+            icon={FaUserCog}
+            title={'Profile Settings'}
+            text={'Manage your account settings and preferences'}
+            href={'/profile'}
+          />
+        </SimpleGrid>
+      </Container>
+    </Box>
+  )
 }
