@@ -29,11 +29,7 @@ export function Navigation() {
     >
       <Flex align="center" mr={5}>
         <ChakraLink as={NextLink} href="/">
-          <Image
-            src="/logo.svg"
-            alt="House Maintenance App Logo"
-            height="8rem"
-          />
+          <Image src="/logo.svg" alt="Talabayt Logo" height="80px" />
         </ChakraLink>
       </Flex>
 

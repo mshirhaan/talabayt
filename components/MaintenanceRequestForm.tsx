@@ -1,7 +1,3 @@
-// src/components/MaintenanceRequestForm.tsx
-
-"use client";
-
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { addDoc, collection } from "firebase/firestore";
@@ -13,9 +9,6 @@ import {
   Input,
   Textarea,
   VStack,
-  Select,
-  Checkbox,
-  CheckboxGroup,
   Radio,
   RadioGroup,
   Stack,
@@ -23,40 +16,11 @@ import {
   Box,
 } from "@chakra-ui/react";
 
-const maintenanceCategories = [
-  "Plumbing",
-  "Electrical",
-  "HVAC",
-  "Appliance Repair",
-  "Structural",
-  "Painting",
-  "Flooring",
-  "Landscaping",
-  "Pest Control",
-  "Other",
-] as const;
-
-const urgencyLevels = [
-  "Low - No rush",
-  "Medium - Needs attention soon",
-  "High - Urgent issue",
-  "Emergency - Immediate attention required",
-] as const;
-
-type MaintenanceCategory = (typeof maintenanceCategories)[number];
-type UrgencyLevel = (typeof urgencyLevels)[number];
-type PreferredTime = "morning" | "afternoon" | "evening";
-type AdditionalService = "inspection" | "cleaning" | "preventive";
-
-export function MaintenanceRequestForm() {
-  const [category, setCategory] = useState<MaintenanceCategory | "">("");
+export function MaintenanceRequestForm({ category }: { category: string }) {
   const [specificIssue, setSpecificIssue] = useState("");
   const [description, setDescription] = useState("");
-  const [urgency, setUrgency] = useState<UrgencyLevel>("Low - No rush");
-  const [preferredTimes, setPreferredTimes] = useState<PreferredTime[]>([]);
-  const [additionalServices, setAdditionalServices] = useState<
-    AdditionalService[]
-  >([]);
+  const [urgency, setUrgency] = useState("Low - No rush");
+  const [preferredTimes, setPreferredTimes] = useState<string[]>([]);
   const { user } = useAuth();
   const toast = useToast();
 
@@ -72,7 +36,6 @@ export function MaintenanceRequestForm() {
         description,
         urgency,
         preferredTimes,
-        additionalServices,
         status: "pending",
         createdAt: new Date(),
       });
@@ -84,12 +47,10 @@ export function MaintenanceRequestForm() {
         isClosable: true,
       });
       // Reset form fields
-      setCategory("");
       setSpecificIssue("");
       setDescription("");
       setUrgency("Low - No rush");
       setPreferredTimes([]);
-      setAdditionalServices([]);
     } catch (error) {
       console.error("Error submitting request:", error);
       toast({
@@ -105,21 +66,6 @@ export function MaintenanceRequestForm() {
   return (
     <form onSubmit={handleSubmit}>
       <VStack spacing={6} align="stretch">
-        <FormControl isRequired>
-          <FormLabel>Maintenance Category</FormLabel>
-          <Select
-            placeholder="Select category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value as MaintenanceCategory)}
-          >
-            {maintenanceCategories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-
         <FormControl isRequired>
           <FormLabel>Specific Issue</FormLabel>
           <Input
@@ -140,50 +86,18 @@ export function MaintenanceRequestForm() {
 
         <FormControl as="fieldset" isRequired>
           <FormLabel as="legend">Urgency Level</FormLabel>
-          <RadioGroup
-            value={urgency}
-            onChange={(value) => setUrgency(value as UrgencyLevel)}
-          >
+          <RadioGroup value={urgency} onChange={(value) => setUrgency(value)}>
             <Stack direction="column">
-              {urgencyLevels.map((level) => (
-                <Radio key={level} value={level}>
-                  {level}
-                </Radio>
-              ))}
+              <Radio value="Low - No rush">Low - No rush</Radio>
+              <Radio value="Medium - Needs attention soon">
+                Medium - Needs attention soon
+              </Radio>
+              <Radio value="High - Urgent issue">High - Urgent issue</Radio>
+              <Radio value="Emergency - Immediate attention required">
+                Emergency - Immediate attention required
+              </Radio>
             </Stack>
           </RadioGroup>
-        </FormControl>
-
-        <FormControl>
-          <FormLabel>Preferred Service Times</FormLabel>
-          <CheckboxGroup
-            colorScheme="blue"
-            value={preferredTimes}
-            onChange={(values) => setPreferredTimes(values as PreferredTime[])}
-          >
-            <Stack spacing={[1, 5]} direction={["column", "row"]}>
-              <Checkbox value="morning">Morning (8AM - 12PM)</Checkbox>
-              <Checkbox value="afternoon">Afternoon (12PM - 5PM)</Checkbox>
-              <Checkbox value="evening">Evening (5PM - 8PM)</Checkbox>
-            </Stack>
-          </CheckboxGroup>
-        </FormControl>
-
-        <FormControl>
-          <FormLabel>Additional Services</FormLabel>
-          <CheckboxGroup
-            colorScheme="blue"
-            value={additionalServices}
-            onChange={(values) =>
-              setAdditionalServices(values as AdditionalService[])
-            }
-          >
-            <Stack spacing={[1, 5]} direction={["column", "row"]}>
-              <Checkbox value="inspection">General Inspection</Checkbox>
-              <Checkbox value="cleaning">Cleaning Services</Checkbox>
-              <Checkbox value="preventive">Preventive Maintenance</Checkbox>
-            </Stack>
-          </CheckboxGroup>
         </FormControl>
 
         <Box>

@@ -72,7 +72,7 @@ export default function Home() {
             color={"#002f6d"}
             mb={4}
           >
-            Welcome to House Maintenance App
+            Welcome to Talabayt
           </Heading>
           <Text color={"gray.500"} fontSize={"lg"}>
             Your one-stop solution for all your home maintenance needs
