@@ -70,7 +70,7 @@ export default function MyRequests() {
             ))}
           </VStack>
         ) : (
-          <Text>You haven't submitted any maintenance requests yet.</Text>
+          <Text>You haven&apos;t submitted any maintenance requests yet.</Text>
         )}
       </Container>
     </ProtectedRoute>
